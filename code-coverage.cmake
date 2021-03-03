@@ -368,13 +368,13 @@ function(target_code_coverage TARGET_NAME)
 
         # Generate exclusion string for use
         foreach(EXCLUDE_ITEM ${target_code_coverage_EXCLUDE})
-          set(EXCLUDE_REGEX ${EXCLUDE_REGEX} --remove ${COVERAGE_INFO}
-                            '${EXCLUDE_ITEM}')
+          set(EXCLUDE_REGEX ${EXCLUDE_REGEX} '${EXCLUDE_ITEM}')
         endforeach()
 
         if(EXCLUDE_REGEX)
-          set(EXCLUDE_COMMAND ${LCOV_PATH} ${EXCLUDE_REGEX} --output-file
-                              ${COVERAGE_INFO})
+          set(EXCLUDE_COMMAND ${LCOV_PATH}
+                              --remove ${COVERAGE_INFO} ${EXCLUDE_REGEX}
+                              --output-file ${COVERAGE_INFO})
         else()
           set(EXCLUDE_COMMAND ;)
         endif()
@@ -544,13 +544,13 @@ function(add_code_coverage_all_targets)
       # Exclusion regex string creation
       set(EXCLUDE_REGEX)
       foreach(EXCLUDE_ITEM ${add_code_coverage_all_targets_EXCLUDE})
-        set(EXCLUDE_REGEX ${EXCLUDE_REGEX} --remove ${COVERAGE_INFO}
-                          '${EXCLUDE_ITEM}')
+        set(EXCLUDE_REGEX ${EXCLUDE_REGEX} '${EXCLUDE_ITEM}')
       endforeach()
 
       if(EXCLUDE_REGEX)
-        set(EXCLUDE_COMMAND ${LCOV_PATH} ${EXCLUDE_REGEX} --output-file
-                            ${COVERAGE_INFO})
+        set(EXCLUDE_COMMAND ${LCOV_PATH}
+                            --remove ${COVERAGE_INFO} ${EXCLUDE_REGEX}
+                            --output-file ${COVERAGE_INFO})
       else()
         set(EXCLUDE_COMMAND ;)
       endif()
