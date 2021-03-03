@@ -348,6 +348,7 @@ function(target_code_coverage TARGET_NAME)
           COMMAND
             ${LLVM_COV_PATH} show $<TARGET_FILE:${TARGET_NAME}> ${SO_OBJECTS}
             -instr-profile=${target_code_coverage_COVERAGE_TARGET_NAME}.profdata
+            -Xdemangler c++filt -Xdemangler -n
             -show-line-counts-or-regions
             -output-dir=${CMAKE_COVERAGE_OUTPUT_DIRECTORY}/${target_code_coverage_COVERAGE_TARGET_NAME}
             -format="html" ${EXCLUDE_REGEX}
@@ -527,6 +528,7 @@ function(add_code_coverage_all_targets)
           ${LLVM_COV_PATH} show `cat
           ${CMAKE_COVERAGE_OUTPUT_DIRECTORY}/binaries.list`
           -instr-profile=${CMAKE_COVERAGE_OUTPUT_DIRECTORY}/all-merged.profdata
+          -Xdemangler c++filt -Xdemangler -n
           -show-line-counts-or-regions
           -output-dir=${CMAKE_COVERAGE_OUTPUT_DIRECTORY}/all-merged
           -format="html" ${EXCLUDE_REGEX}
