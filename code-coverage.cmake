@@ -171,7 +171,7 @@ if(CODE_COVERAGE AND NOT CODE_COVERAGE_ADDED)
     endif()
 
     # Targets
-    add_custom_target(ccov-clean COMMAND ${LCOV_PATH} --directory
+    add_custom_target(ccov-clean COMMAND ${LCOV_PATH} --quiet --directory
                                          ${CMAKE_BINARY_DIR} --zerocounters)
 
   else()
@@ -372,7 +372,7 @@ function(target_code_coverage TARGET_NAME)
         endforeach()
 
         if(EXCLUDE_REGEX)
-          set(EXCLUDE_COMMAND ${LCOV_PATH}
+          set(EXCLUDE_COMMAND ${LCOV_PATH} --quiet
                               --remove ${COVERAGE_INFO} ${EXCLUDE_REGEX}
                               --output-file ${COVERAGE_INFO})
         else()
@@ -387,10 +387,10 @@ function(target_code_coverage TARGET_NAME)
         add_custom_target(
           ccov-capture-${target_code_coverage_COVERAGE_TARGET_NAME}
           COMMAND ${CMAKE_COMMAND} -E remove ${COVERAGE_INFO}
-          COMMAND ${LCOV_PATH} --directory ${CMAKE_BINARY_DIR} --zerocounters
+          COMMAND ${LCOV_PATH} --quiet --directory ${CMAKE_BINARY_DIR} --zerocounters
           COMMAND $<TARGET_FILE:${TARGET_NAME}> ${target_code_coverage_ARGS}
           COMMAND
-            ${LCOV_PATH} --directory ${CMAKE_BINARY_DIR} --base-directory
+            ${LCOV_PATH} --quiet --directory ${CMAKE_BINARY_DIR} --base-directory
             ${CMAKE_SOURCE_DIR} --capture ${EXTERNAL_OPTION} --output-file
             ${COVERAGE_INFO}
           COMMAND ${EXCLUDE_COMMAND}
@@ -400,10 +400,11 @@ function(target_code_coverage TARGET_NAME)
         add_custom_target(
           ccov-${target_code_coverage_COVERAGE_TARGET_NAME}
           COMMAND
-            ${GENHTML_PATH} -o
+            ${GENHTML_PATH} --quiet -o
             ${CMAKE_COVERAGE_OUTPUT_DIRECTORY}/${target_code_coverage_COVERAGE_TARGET_NAME}
             ${COVERAGE_INFO}
           DEPENDS ccov-capture-${target_code_coverage_COVERAGE_TARGET_NAME})
+
       endif()
 
       add_custom_command(
@@ -548,7 +549,7 @@ function(add_code_coverage_all_targets)
       endforeach()
 
       if(EXCLUDE_REGEX)
-        set(EXCLUDE_COMMAND ${LCOV_PATH}
+        set(EXCLUDE_COMMAND ${LCOV_PATH} --quiet
                             --remove ${COVERAGE_INFO} ${EXCLUDE_REGEX}
                             --output-file ${COVERAGE_INFO})
       else()
@@ -559,7 +560,7 @@ function(add_code_coverage_all_targets)
       add_custom_target(
         ccov-all-capture
         COMMAND ${CMAKE_COMMAND} -E remove ${COVERAGE_INFO}
-        COMMAND ${LCOV_PATH} --directory ${CMAKE_BINARY_DIR} --capture
+        COMMAND ${LCOV_PATH} --quiet --directory ${CMAKE_BINARY_DIR} --capture
                 --output-file ${COVERAGE_INFO}
         COMMAND ${EXCLUDE_COMMAND}
         DEPENDS ccov-all-processing)
@@ -567,7 +568,7 @@ function(add_code_coverage_all_targets)
       # Generates HTML output of all targets for perusal
       add_custom_target(
         ccov-all
-        COMMAND ${GENHTML_PATH} -o ${CMAKE_COVERAGE_OUTPUT_DIRECTORY}/all-merged
+        COMMAND ${GENHTML_PATH} --quiet -o ${CMAKE_COVERAGE_OUTPUT_DIRECTORY}/all-merged
                 ${COVERAGE_INFO}
         DEPENDS ccov-all-capture)
 
