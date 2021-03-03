@@ -80,10 +80,18 @@ option(
   OFF)
 
 # Programs
-find_program(LLVM_COV_PATH llvm-cov)
-find_program(LLVM_PROFDATA_PATH llvm-profdata)
-find_program(LCOV_PATH lcov)
-find_program(GENHTML_PATH genhtml)
+if(CMAKE_C_COMPILER_ID MATCHES "(Apple)?[Cc]lang"
+   OR CMAKE_CXX_COMPILER_ID MATCHES "(Apple)?[Cc]lang")
+  # Some systems append the LLVM version to tool names, as llvm-cov-X
+  # We need to get the compiler version to suggest a binary name
+  string(REGEX MATCH "^[0-9]+" LLVM_VER "${CMAKE_C_COMPILER_VERSION}${CMAKE_CXX_COMPILER_VERSION}")
+  find_program(LLVM_COV_PATH NAMES llvm-cov llvm-cov-${LLVM_VER})
+  find_program(LLVM_PROFDATA_PATH NAMES llvm-profdata llvm-profdata-${LLVM_VER})
+elseif(CMAKE_C_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+  find_program(LCOV_PATH lcov)
+  find_program(GENHTML_PATH genhtml)
+endif()
+
 # Hide behind the 'advanced' mode flag for GUI/ccmake
 mark_as_advanced(FORCE LLVM_COV_PATH LLVM_PROFDATA_PATH LCOV_PATH GENHTML_PATH)
 
