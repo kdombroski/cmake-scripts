@@ -318,6 +318,7 @@ function(target_code_coverage TARGET_NAME)
         # Ignore regex only works on LLVM >= 7
         if(LLVM_COV_VERSION VERSION_GREATER_EQUAL "7.0.0")
           foreach(EXCLUDE_ITEM ${target_code_coverage_EXCLUDE})
+            string(REPLACE * .* EXCLUDE_ITEM ${EXCLUDE_ITEM})
             set(EXCLUDE_REGEX ${EXCLUDE_REGEX}
                               -ignore-filename-regex='${EXCLUDE_ITEM}')
           endforeach()
@@ -491,6 +492,7 @@ function(add_code_coverage_all_targets)
       # Regex exclude only available for LLVM >= 7
       if(LLVM_COV_VERSION VERSION_GREATER_EQUAL "7.0.0")
         foreach(EXCLUDE_ITEM ${add_code_coverage_all_targets_EXCLUDE})
+          string(REPLACE * .* EXCLUDE_ITEM ${EXCLUDE_ITEM})
           set(EXCLUDE_REGEX ${EXCLUDE_REGEX}
                             -ignore-filename-regex='${EXCLUDE_ITEM}')
         endforeach()
