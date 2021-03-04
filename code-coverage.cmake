@@ -391,7 +391,7 @@ function(target_code_coverage TARGET_NAME)
           COMMAND $<TARGET_FILE:${TARGET_NAME}> ${target_code_coverage_ARGS}
           COMMAND
             ${LCOV_PATH} --quiet --directory ${CMAKE_BINARY_DIR} --base-directory
-            ${CMAKE_SOURCE_DIR} --capture ${EXTERNAL_OPTION} --output-file
+            ${CMAKE_BINARY_DIR} --capture ${EXTERNAL_OPTION} --output-file
             ${COVERAGE_INFO}
           COMMAND ${EXCLUDE_COMMAND}
           DEPENDS ccov-preprocessing ${TARGET_NAME})
