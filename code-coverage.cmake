@@ -422,8 +422,8 @@ function(target_code_coverage TARGET_NAME)
         endif()
         add_dependencies(ccov ccov-${target_code_coverage_COVERAGE_TARGET_NAME})
 
-        if(NOT CMAKE_C_COMPILER_ID MATCHES "GNU" OR NOT CMAKE_CXX_COMPILER_ID
-                                                    MATCHES "GNU")
+        if(CMAKE_C_COMPILER_ID MATCHES "(Apple)?[Cc]lang"
+           OR CMAKE_CXX_COMPILER_ID MATCHES "(Apple)?[Cc]lang")
           if(NOT TARGET ccov-report)
             add_custom_target(ccov-report)
           endif()
